@@ -1,0 +1,80 @@
+{{- if .Values.psp.enable -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: '{{ template "fullname" . }}-psp'
+  labels:
+    app: '{{ template "fullname" . }}'
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+    - '{{ template "fullname" . }}'
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: '{{ template "fullname" . }}-psp'
+  labels:
+    app: '{{ template "fullname" . }}'
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: '{{ template "fullname" . }}-psp'
+subjects:
+  - kind: ServiceAccount
+    name: '{{ template "fullname" . }}'
+    namespace: '{{ .Release.Namespace }}'
+
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: '{{ template "fullname" . }}'
+  labels:
+    app: '{{ template "fullname" . }}'
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  privileged: false
+  allowedCapabilities:
+    - SYS_ADMIN
+    - NET_ADMIN
+  allowPrivilegeEscalation: true
+  volumes:
+    - configMap
+    - emptyDir
+    - projected
+    - secret
+    - downwardAPI
+    - hostPath
+  allowedHostPaths: 
+  hostNetwork: true
+  hostIPC: true
+  hostPID: true
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+  readOnlyRootFilesystem: false
+  allowedHostPaths:
+    - pathPrefix: "/proc/sys"
+      readOnly: false
+    - pathPrefix: "/sys"
+      readOnly: false
+    - pathPrefix: "/etc"
+      readOnly: false
+{{- end }}

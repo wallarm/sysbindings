@@ -1,0 +1,50 @@
+# This is an example of configuration
+
+## Syntax is same as common linux sysctl.conf file, but presents map (dictionary)
+## See man: https://man7.org/linux/man-pages/man8/sysctl.8.html
+##
+## Use '.' (dot) as path separator.
+##
+## Automaticaly reload if changed
+##
+sysctl:
+  vm.swappiness: 10
+  vm.dirty_ratio: 60
+  fs.file-max: 2097152
+  net.netfilter.nf_conntrack_max: 1048576
+
+## Syntax is same as debian's origin "sysfsutils" package, but presents map (dictionary)
+## See man: https://man7.org/linux/man-pages/man5/sysctl.conf.5.html
+##
+## Keep in mind: use '/' as path separator instead '.'! This is for
+## compatibility with origin controller package.
+##
+## Automaticaly reload if changed
+##
+sysfs:
+  block/nvme0n1/queue/scheduler: mq-deadline
+  block/nvme1n1/queue/scheduler: mq-deadline
+
+## Can be overrided by "SYSBINDINGS_CHROOT_PATH" env
+##
+chroot_path: '/hostroot'
+
+## Can be overrided by "SYSBINDINGS_SYSCTL_CONF_PATH" env
+##
+sysctl_conf_path: /etc/sysctl.conf
+
+## Can be overrided by "SYSBINDINGS_SYSFS_CONF_PATH" env
+##
+sysfs_conf_path: /etc/sysfs.conf
+
+## Can be overrided by "SYSBINDINGS_SYSCTL_PATH" env
+##
+sysctl_path: /proc/sys
+
+## Can be overrided by "SYSBINDINGS_SYSFS_PATH" env
+##
+sysfs_path: /sys
+
+## Can be overrided by "SYSBINDINGS_INTERVAL" env
+##
+interval: 60

@@ -1,0 +1,13 @@
+apiVersion: v1
+description: SysBindings Daemon
+keywords:
+  - sysctl
+  - sysfs
+  - operations
+maintainers:
+  - email: aburyndin@wallarm.com
+    name: Andrey Buryndin
+name: sysbindings
+sources:
+  - https://github.com/wallarm/sysbindings
+version: 0.9.3

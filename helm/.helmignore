@@ -1,0 +1,28 @@
+.DS_Store
+values.dev.yaml
+*.tgz
+
+# Common VCS dirs
+.git/
+.gitignore
+.bzr/
+.bzrignore
+.hg/
+.hgignore
+.svn/
+
+# Common backup files
+*.swp
+*.bak
+*.tmp
+*~
+
+# Various IDEs
+.project
+.idea/
+*.tmproj
+
+_alias.sh
+
+test*.yml
+test*.yaml

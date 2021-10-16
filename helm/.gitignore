@@ -1,0 +1,5 @@
+.DS_Store
+values.dev.yaml
+*.tar.gz
+*.tgz
+_alias.sh

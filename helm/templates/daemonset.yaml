@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: '{{ template "fullname" . }}'
+  labels:
+    app: '{{ template "fullname" . }}'
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  revisionHistoryLimit: 3
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: '{{ template "fullname" . }}'
+      release: "{{ .Release.Name }}"
+  template:
+    metadata:
+      labels:
+        app: '{{ template "fullname" . }}'
+        release: "{{ .Release.Name }}"
+    spec:
+      serviceAccount: {{ template "fullname" . }}
+      affinity: {{ .Values.affinity | toYaml | nindent 8 }}
+      tolerations: {{ .Values.tolerations | toYaml | nindent 8 }}
+      {{ if ne (len .Values.image.pullSecrets) 0 -}}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+        - name: {{ . }}
+      {{- end }}
+      {{ end -}}
+      containers:
+        - name: sysbindings
+          image: {{ template "image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --config
+            - /etc/sysbindings/sysbindings.yaml
+            {{ if .Values.loglevel -}}
+            - --loglevel
+            - {{ .Values.loglevel }}
+            {{- end }}
+          resources: {{ .Values.resources | toYaml | nindent 12 }}
+          securityContext:
+            privileged: false
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - NET_ADMIN
+          volumeMounts:
+            - name: config
+              mountPath: /etc/sysbindings
+              readOnly: true
+            - name: host-proc
+              mountPath: /hostroot/proc/sys
+            - name: host-sys
+              mountPath: /hostroot/sys
+            - name: host-etc
+              mountPath: /hostroot/etc
+      restartPolicy: Always
+      hostPID: true
+      hostIPC: true
+      hostNetwork: true
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      terminationGracePeriodSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "fullname" . }}
+        - name: host-proc
+          hostPath:
+            path: /proc/sys
+        - name: host-sys
+          hostPath:
+            path: /sys
+        - name: host-etc
+          hostPath:
+            path: /etc
