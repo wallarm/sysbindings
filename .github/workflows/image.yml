@@ -22,9 +22,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
+        name: Extract tag name
+        run: echo "DOCKER_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      -
         name: Build and push
         uses: docker/bake-action@master
         with:
           push: true
           set: |
-            *.tags=wallarm/sysbindings:${GITHUB_REF#refs/*/}
+            *.tags=wallarm/sysbindings:${{ env.DOCKER_TAG }}
