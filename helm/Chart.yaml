@@ -10,4 +10,5 @@ maintainers:
 name: sysbindings
 sources:
   - https://github.com/wallarm/sysbindings
-version: 0.9.3
+version: 0.1.0
+appVersion: 0.1.0

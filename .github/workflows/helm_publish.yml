@@ -1,14 +1,18 @@
 name: release
 on:
   push:
-    tags: 'v[0-9]+.[0-9]+.[0-9]+'
+    tags: 'v[0-9]+.[0-9]+.[0-9]+.*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Publish Helm charts
+      -
+        name: Extract tag name
+        run: echo "X_TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      -
+        name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master
         with:
           token: ${{ secrets.HELM_PUBLISH_TOKEN }}
@@ -19,3 +23,5 @@ jobs:
           branch: main
           target_dir: sysbindings
           index_dir: .
+          app_version: "${{ env.X_TAG }}"
+          chart_version: "${{ env.X_TAG }}"
