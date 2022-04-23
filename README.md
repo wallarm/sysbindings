@@ -5,6 +5,16 @@ and without unnecessary restarts of cluster or node pool. Allows to control mana
 and/or own-architected and/or own-managed clusters because uses only well-known
 techniques.
 
+## Helm chart
+
+You are welcome to try our official Helm Registry!
+
+```bash
+helm repo add wallarm https://charts.wallarm.com
+helm repo update
+helm search repo wallarm/sysbindings -l
+```
+
 ## CLI
 
 See `sysbindings --help` for details:
@@ -42,7 +52,3 @@ See details in the `sysbindings.yaml` file.
 
 CLI arguments have maximal priority, ENVs is secondary and config entries
 just final.
-
-## Helm chart
-
-See details about values in the `helm` directory.
