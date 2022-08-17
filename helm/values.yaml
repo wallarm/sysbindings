@@ -2,7 +2,7 @@
 image:
   registry: ""
   repository: wallarm/sysbindings
-  tag: v0.9.4
+  tag: "" # appVersion if empty
   pullPolicy: IfNotPresent
 
   pullSecrets: []
@@ -75,4 +75,4 @@ affinity: {}
 tolerations: []
 
 psp:
-  enable: true
+  enable: false

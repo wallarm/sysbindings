@@ -16,9 +16,10 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{- define "image" -}}
-{{- if .Values.image.registry -}}
-{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+{{- $tag := .Values.image.tag | default .Chart.AppVersion -}}
+{{- if .registry -}}
+{{- printf "%s/%s:%s" .Values.image.registry .Values.image.repository $tag -}}
 {{- else -}}
-{{ .Values.image.repository }}:{{ .Values.image.tag }}
+{{- printf "%s:%s" .Values.image.repository $tag -}}
 {{- end -}}
 {{- end -}}

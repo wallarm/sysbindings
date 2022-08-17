@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.14
+FROM python:3.10-alpine3.16
 
 WORKDIR /opt/sysbindings
 COPY . .
