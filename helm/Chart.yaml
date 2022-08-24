@@ -4,7 +4,7 @@ keywords:
   - sysctl
   - sysfs
   - operations
-home: https://github.com/wallarm/sidecar
+home: https://github.com/wallarm/sysbindings
 icon: https://static.wallarm.com/wallarm-logo.svg
 maintainers:
   - email: aburyndin@wallarm.com
